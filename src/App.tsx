@@ -102,7 +102,7 @@ function TodoItem({
             ></form>
             <input
               type="text"
-              value={item.name}
+              defaultValue={item.name}
               onChange={
                 () => {}
             }
