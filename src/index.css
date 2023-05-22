@@ -30,6 +30,7 @@ body {
   min-width: 320px;
   min-height: 100vh;
   background-color: #03001c;
+  
 }
 
 h1 {
@@ -61,6 +62,10 @@ button:focus-visible {
   :root {
     color: #213547;
     background-color: #ffffff;
+  }
+
+  a{
+    color: white;
   }
   a:hover {
     color: #747bff;

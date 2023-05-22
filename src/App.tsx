@@ -95,7 +95,7 @@ function TodoItem({
     <div>
       <li>
         {isInEditMode ? (
-          <div>
+          <div className="edit">
             <form
               action="submit"
               onSubmit={(event) => {event.preventDefault; }}
@@ -104,14 +104,15 @@ function TodoItem({
               type="text"
               defaultValue={item.name}
               onChange={
-                () => {}
+                (e) => {item.name = e.target.value}
             }
             />
-            <button type="submit">save</button>
+            <button type="submit" onClick={() => setIsInEditMode(false)}>save</button>
             <button onClick={() => setIsInEditMode(false)}>cancel</button>
           </div>
         ) : (
-          <>{isCheck ? <s>{item.name}</s> : <>{item.name}</>}</>
+          <>{isCheck ? (<s>{item.name}</s>) : (<a>{item.name}</a>)}</>
+          
         )}
         <button onClick={() => setIsInEditMode(true)}>edit</button>
         <button onClick={() => onDelete(item)}>del</button>
