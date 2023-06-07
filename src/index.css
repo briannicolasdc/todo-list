@@ -19,8 +19,14 @@ a {
   color: #646cff;
   text-decoration: inherit;
 }
+
+
 a:hover {
   color: #535bf2;
+}
+
+input[type="checkbox"] {
+  margin-right: 10px;
 }
 
 body {
@@ -29,6 +35,8 @@ body {
   place-items: center;
   min-width: 320px;
   min-height: 100vh;
+  background-color: #03001c;
+  
 }
 
 h1 {
@@ -36,23 +44,55 @@ h1 {
   line-height: 1.1;
 }
 
+ul{
+  list-style-type: none;
+}
+
+.item{
+  float: left;
+  justify-content: center;
+}
+
+.item a {
+  max-width: 8em;
+  min-width: 8em;
+  display: inline-block;
+  word-wrap: break-word;
+  
+}
+
+s{
+  max-width: 8em;
+  min-width: 8em;
+  display: inline-block;
+  word-wrap: break-word;
+}
+
+
 button {
   border-radius: 8px;
   border: 1px solid transparent;
   padding: 0.6em 1.2em;
-  font-size: 1em;
+  font-size: 0.70em;
   font-weight: 500;
   font-family: inherit;
-  background-color: #1a1a1a;
+  background: #8257e5 !important;
+  color: white;
   cursor: pointer;
   transition: border-color 0.25s;
 }
+
 button:hover {
-  border-color: #646cff;
+  border-color: #301E67;
 }
+
 button:focus,
 button:focus-visible {
   outline: 4px auto -webkit-focus-ring-color;
+}
+
+button:disabled {
+  background-color: gray;
 }
 
 @media (prefers-color-scheme: light) {
@@ -60,10 +100,17 @@ button:focus-visible {
     color: #213547;
     background-color: #ffffff;
   }
+
+  a {
+    color: white;
+  }
+
   a:hover {
     color: #747bff;
   }
+
   button {
     background-color: #f9f9f9;
+
   }
 }
