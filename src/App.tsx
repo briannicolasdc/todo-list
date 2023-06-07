@@ -1,67 +1,82 @@
-import { useState } from "react";
+import { FormEvent, FormEventHandler, useRef, useState } from "react";
 import "./App.css";
-
-interface TodoItem {
-  id: string;
-  name: string;
-  isChecked: boolean;
-}
+import { TodoItem } from "./TodoItem";
 
 const App: React.FC = () => {
   const [newTodoDescription, setNewTodoDescription] = useState<string>("");
   const [todos, setTodos] = useState<TodoItem[]>([]);
 
-  const todoCompleted = (item: TodoItem) => {
-    todos.push(todos.splice(todos.indexOf(item), 1)[0]);
-  };
-
   function onDeleteItem(item: TodoItem): void {
     setTodos((prev) => prev.filter((listItem) => listItem.id !== item.id));
   }
 
-  function onChangeItemName(item: TodoItem): void {
-    throw new Error("Function not implemented.");
+  function onChangeItemName(itemId: string, newName: string): void {
+    const newTodos = todos.map((todo) => {
+      if (todo.id === itemId) {
+        return { ...todo, name: newName };
+      }
+
+      return todo;
+    });
+
+    setTodos(newTodos);
   }
 
-  function onCheckItem(item: TodoItem, isChecked: false): void {
-    throw new Error("Function not implemented.");
+  function onCheckItem(itemId: string): void {
+    const newTodos = todos.map((todo) => {
+      if (todo.id === itemId) {
+        return { ...todo, isChecked: !todo.isChecked };
+      }
+
+      return todo;
+    });
+
+    setTodos(newTodos);
   }
+
+  const handle = (event: FormEvent) => {
+    event.preventDefault();
+    setTodos([
+      ...todos,
+      {
+        id: Math.random().toString(),
+        name: newTodoDescription,
+        isChecked: false,
+      },
+    ]);
+    setNewTodoDescription("");
+  };
 
   return (
     <div className="App">
       <div>
         <div>
-          <form
-            onSubmit={(event) => {
-              event.preventDefault();
-              setTodos([
-                ...todos,
-                {
-                  id: Math.random().toString(),
-                  name: newTodoDescription,
-                  isChecked: false,
-                },
-              ]);
-            }}
-          >
+          <form onSubmit={(e) => handle(e)}>
             <input
               type="text"
               value={newTodoDescription}
-              onChange={(e) => setNewTodoDescription(e.target.value)}
+              onChange={(e) => {
+                setNewTodoDescription(e.target.value);
+              }}
             />
             <button type="submit">Adicionar</button>
           </form>
         </div>
         <div>
           <ul>
-            {todos.map((todo, i) => (
-              <TodoItem
-                item={todo}
-                onChangeName={onChangeItemName}
-                onDelete={onDeleteItem}
-                onCheck={onCheckItem}
-              />
-            ))}
+            {todos
+              .sort((a, b) => {
+                return Number(a.isChecked) - Number(b.isChecked);
+              })
+              .map((todo, i) => (
+                <TodoItem
+                  key={todo.id}
+                  item={todo}
+                  onChangeName={onChangeItemName}
+                  onDelete={onDeleteItem}
+                  onCheck={onCheckItem}
+                />
+              ))}
           </ul>
         </div>
       </div>
@@ -70,54 +85,3 @@ const App: React.FC = () => {
 };
 
 export default App;
-
-interface TodoItemProps {
-  item: TodoItem;
-  onDelete: (item: TodoItem) => void;
-  onChangeName: (item: TodoItem) => void;
-  onCheck: (item: TodoItem, isChecked: false) => void;
-}
-
-function TodoItem({
-  item,
-  onDelete,
-  onChangeName,
-  onCheck,
-}: TodoItemProps): JSX.Element {
-  const [isInEditMode, setIsInEditMode] = useState(false);
-  const [isCheck, setIsCheck] = useState(false);
-
-  const editing = (item: TodoItem) => {
-    return <div></div>;
-  };
-
-  return (
-    <div>
-      <li>
-        {isInEditMode ? (
-          <div className="edit">
-            <form
-              action="submit"
-              onSubmit={(event) => {event.preventDefault; }}
-            ></form>
-            <input
-              type="text"
-              defaultValue={item.name}
-              onChange={
-                (e) => {item.name = e.target.value}
-            }
-            />
-            <button type="submit" onClick={() => setIsInEditMode(false)}>save</button>
-            <button onClick={() => setIsInEditMode(false)}>cancel</button>
-          </div>
-        ) : (
-          <>{isCheck ? (<s>{item.name}</s>) : (<a>{item.name}</a>)}</>
-          
-        )}
-        <button onClick={() => setIsInEditMode(true)}>edit</button>
-        <button onClick={() => onDelete(item)}>del</button>
-        <input type="checkbox" onChange={() => setIsCheck(!isCheck)} />
-      </li>
-    </div>
-  );
-}
